@@ -6,18 +6,28 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LempelZivTest {
-	LempelZiv first;
+	LempelZiv first,second;
 	@Before
 	public void Setup(){
 		 first = new LempelZiv("abcbababcbcabac");
+		 second = new LempelZiv("Isto é um teste, muito legal este teste!");
 	}
 
 	@Test
 	public void EncryptTrial() {
-		assertEquals("010100110101000100011000111000",first.toEncodedString());
-		//assertEquals("010100110101000100011000111000C",first.toEncodedString());
+		assertEquals("010100110101000100011000111000c",first.toEncodedString());
 		}
-	
+	@Test
+	public void DecryptTrial() {
+	    first.decode();
+		assertEquals("abcbababcbcabac",first.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial2() {
+	    second.decode();
+	    System.out.println(second.toEncodedString());
+		assertEquals("Isto é um teste, muito legal este teste!",second.toDecodedString());
+	}		
 	@Test
 	public void TestGetB(){
 		assertEquals(2,first.getB(3));
