@@ -16,12 +16,10 @@ public class LempelZiv {
 		return _middleString;
 	}
 	private void encode(){
-		int i = dicIn.size();
 		int j = 0;
 		int k = 0;
 		_middleString = "";
 		String s="", S="", c="";
-		i++;
 		while (j<_inString.length()){
 			k=j;
 			S=c;
@@ -36,8 +34,12 @@ public class LempelZiv {
 			_middleString = _middleString + prettyBinary(dicIn.indexOf(s),getB(dicIn.size()-1));
 
 		} 
-		printDic();
+		_middleString = _middleString + _inString.charAt(k-1);
+		//printDic();
 	}
+	
+	
+	
 	public String prettyBinary(int value,int chars){
 	    String result = Integer.toString(value,2);
 	    while (result.length()<chars){
