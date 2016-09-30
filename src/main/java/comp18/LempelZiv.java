@@ -129,7 +129,7 @@ public class LempelZiv {
 			//printDicIn();
 			
 			
-			if (dicIn.size() == 200)
+			if (dicIn.size() == 100)
 			{
 				makeDic();
 				_middleString = _middleString + c;
@@ -152,7 +152,7 @@ public class LempelZiv {
 		} 
 		//System.out.println("k = " + k);
 
-		_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
+		//_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
 		
 		//System.out.println(_middleString);
 		//printDic();
@@ -197,6 +197,7 @@ public class LempelZiv {
 	           ends = codedString.length()-1;
 	        actualString = codedString.substring(0,ends);
 	        codedString = codedString.substring(ends);
+
 	        e = Integer.parseInt(actualString, 2);
 	        if (e>0){
 	            if (e < dicOut.size()){
@@ -211,6 +212,7 @@ public class LempelZiv {
     	        	currentString = currentString + currentString.charAt(0);
     	        	_outString = _outString + currentString;
     	        }  
+
 	        }
 
             //Inicio duvida merge, isto fica?
@@ -230,10 +232,12 @@ public class LempelZiv {
 	        else i++;
 	        // Fim duvida merge
 	        if(codedString.substring(0).length() < getB(i+1)) 
+
 	        	endFlag = true;
 	        //i++;
 	    }
 	    _outString = _outString + codedString;
+
 	}
 	
 	
@@ -304,6 +308,7 @@ public class LempelZiv {
 		return dicIn.contains(S);
 	}
 }
+
 
 
 
