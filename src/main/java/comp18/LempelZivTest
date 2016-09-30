@@ -1,0 +1,98 @@
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class LempelZivTest {
+	/*
+	LempelZiv first = new LempelZiv("abcbababcbcabac");
+	LempelZiv second = new LempelZiv("Isto é um teste, muito legal este teste!");
+	LempelZiv third = new LempelZiv("ababa");
+	LempelZiv fourth = new LempelZiv("abababa");
+	LempelZiv fifth = new LempelZiv("ababababa");
+	LempelZiv sixth = new LempelZiv("abababababa");
+	LempelZiv seventh = new LempelZiv("ababababababa");
+	LempelZiv eighth = new LempelZiv("ababababababab");
+	LempelZiv ninth = new LempelZiv("Qualquer whatever da COMP ITA!");
+	LempelZiv tenth = new LempelZiv("Estamos usando o TDD para descobrir se este programa funciona.");
+	*/
+	LempelZiv eleventh = new LempelZiv("The official name reflects its history as a member of the medieval Hanseatic League, as a free imperial city of the Holy Roman Empire, a city-state, and one of the 16 states of Germany. Before the 1871 Unification of Germany, it was a fully sovereign state. Prior to the constitutional changes in 1919, the civic republic was ruled by a class of hereditary grand burghers or Hanseaten.Hamburg is a transport hub, being the 2nd largest port in Europe, and is an affluent city in Europe. It has become a media and industrial centre, with plants and facilities belonging to Airbus, Blohm + Voss and Aurubis. The radio and television broadcaster Norddeutscher Rundfunk and publishers such as Gruner + Jahr and Spiegel-Verlag are pillars of the important media industry in Hamburg. Hamburg has been an important financial centre for centuries, and is the seat of the world's second oldest bank, Berenberg Bank.The city is a notable tourist destination for both domestic and overseas visitors; it ranked 36th in the world for livability in 2015.[7]The ensemble Speicherstadt and Kontorhausviertel was declared a World Heritage Site by the UNESCO in July 2225.[8]");
+
+
+
+	@Test
+	public void EncryptTrial()
+	{
+		eleventh.decode();
+		assertEquals("The official name reflects its history as a member of the medieval Hanseatic League, as a free imperial city of the Holy Roman Empire, a city-state, and one of the 16 states of Germany. Before the 1871 Unification of Germany, it was a fully sovereign state. Prior to the constitutional changes in 1919, the civic republic was ruled by a class of hereditary grand burghers or Hanseaten.Hamburg is a transport hub, being the 2nd largest port in Europe, and is an affluent city in Europe. It has become a media and industrial centre, with plants and facilities belonging to Airbus, Blohm + Voss and Aurubis. The radio and television broadcaster Norddeutscher Rundfunk and publishers such as Gruner + Jahr and Spiegel-Verlag are pillars of the important media industry in Hamburg. Hamburg has been an important financial centre for centuries, and is the seat of the world's second oldest bank, Berenberg Bank.The city is a notable tourist destination for both domestic and overseas visitors; it ranked 36th in the world for livability in 2015.[7]The ensemble Speicherstadt and Kontorhausviertel was declared a World Heritage Site by the UNESCO in July 2225.[8]",eleventh.toDecodedString());
+	}
+	
+	/*
+	@Test
+	public void DecryptTrial()
+	{
+	    first.decode();
+		assertEquals("abcbababcbcabac",first.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial2() {
+	    second.decode();
+	    System.out.println(second.toEncodedString());
+		assertEquals("Isto é um teste, muito legal este teste!",second.toDecodedString());
+	}	
+	@Test
+	public void DecryptTrial3() {
+	    third.decode();
+		assertEquals("ababa",third.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial4() {
+	    fourth.decode();
+		assertEquals("abababa",fourth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial5() {
+	    fifth.decode();
+		assertEquals("ababababa",fifth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial6() {
+	    sixth.decode();
+		assertEquals("abababababa",sixth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial7() {
+	    seventh.decode();
+		assertEquals("ababababababa",seventh.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial8() {
+	    eighth.decode();
+		assertEquals("ababababababab",eighth.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial9() {
+	    ninth.decode();
+		assertEquals("Qualquer whatever da COMP ITA!",ninth.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial10() {
+	    tenth.decode();
+		assertEquals("Estamos usando o TDD para descobrir se este programa funciona.",tenth.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial11() {
+	    eleventh.decode();
+		assertEquals("Estamos usando o TDD para descobrir se este programa fdosamdosamcinsidnsidni!@!@()!(Smksmakmckmkkjsodksodksoslpalspals09mcmck     lspalspalspalspalspa/*asasalplpa01t",eleventh.toDecodedString());
+	}
+	
+	
+	*/
+	
+	
+	
+
+}
