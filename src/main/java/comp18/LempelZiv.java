@@ -152,7 +152,7 @@ public class LempelZiv {
 		} 
 		//System.out.println("k = " + k);
 
-		//_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
+		_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
 		
 		//System.out.println(_middleString);
 		//printDic();
