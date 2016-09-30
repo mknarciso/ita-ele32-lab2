@@ -1,3 +1,4 @@
+
 package comp18;
 
 import java.io.BufferedReader;
@@ -9,7 +10,7 @@ import java.util.List;
 //import java.math.*;
 
 public class LempelZiv {
-	private String _inString, _middleString, _outString;
+	private String _inString, _middleString, _outString, _OriginalString;
 	byte[] _byteMiddleString; 
 	public List<String> dicIn = new ArrayList<String>();
 	public List<String> dicOut = new ArrayList<String>();
@@ -19,12 +20,14 @@ public class LempelZiv {
 	public LempelZiv(String inicial)
 	{
 		_inString = inicial;
+		_OriginalString = inicial;
 		makeDic();
 		encode();
 	}
 	public void addFileToEncode(String filename) throws IOException {
 	    try{
     		_inString = readFile("./src/data/"+filename);
+		    _OriginalString = _inString;
     		makeDic();
     		encode();
     		}catch(IOException e){
@@ -63,12 +66,23 @@ public class LempelZiv {
     }
 	public String inputString()
 	{
-		return _inString;
+		return _OriginalString;
 	}
 	public String toEncodedString()
 	{
 		return _middleString;
 	}
+	/*
+	public String toStringtoBeWritteninFile()
+	{
+		String result;
+		while (_middleString.length() %8 != 0)
+			_middleString =_middleString
+			
+		
+	}
+	*/
+	
 	public String toDecodedString()
 	{
 		return _outString;
@@ -109,10 +123,36 @@ public class LempelZiv {
 				_middleString = _middleString + prettyBinary(dicIn.indexOf(s),getB(dicIn.size()-1));
 			else _middleString = _middleString + prettyBinary(dicIn.indexOf(s.substring(0, s.length() - 1)),getB(dicIn.size()-1));
 			
+			//System.out.println("Sequencia ateh agora:" + _middleString);
+			
+			
+			//printDicIn();
+			
+			
+			if (dicIn.size() == 200)
+			{
+				makeDic();
+				_middleString = _middleString + c;
+
+				if (k < _inString.length())
+					_inString = _inString.substring(k);
+				else _inString = "";
+				
+				j = 0;
+				k = 0;
+				s = "";
+				S = "";
+				c = "";
+				
+				
+				//System.out.println("_inString = " + _inString);
+			}
+			
+			
 		} 
 		//System.out.println("k = " + k);
-		
-    	_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
+
+		_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
 		
 		//System.out.println(_middleString);
 		//printDic();
@@ -149,6 +189,7 @@ public class LempelZiv {
 	    //boolean pegar_o_ultimo = true;
         codedString = makeOutDic(codedString);
         int i = dicOut.size();
+
 	    while (codedString.length()>0 && !endFlag)
 	    {
 	        int ends = getB(i);
@@ -157,27 +198,47 @@ public class LempelZiv {
 	        actualString = codedString.substring(0,ends);
 	        codedString = codedString.substring(ends);
 	        e = Integer.parseInt(actualString, 2);
-	        if (e < dicOut.size()){
-	        	_outString = _outString + dicOut.get(e);
-	        	if (!dicOut.contains(currentString + dicOut.get(e).charAt(0) )){
-	        		dicOut.add(currentString + dicOut.get(e).charAt(0) );
-	        	}
-	        	currentString = dicOut.get(e);
+	        if (e>0){
+	            if (e < dicOut.size()){
+    	        	_outString = _outString + dicOut.get(e);
+    	        	if (!dicOut.contains(currentString + dicOut.get(e).charAt(0) )){
+    	        		dicOut.add(currentString + dicOut.get(e).charAt(0) );
+    	        	}
+    	        	currentString = dicOut.get(e);
+    	        }
+    	        else {
+    	        	dicOut.add(currentString + currentString.charAt(0));
+    	        	currentString = currentString + currentString.charAt(0);
+    	        	_outString = _outString + currentString;
+    	        }  
 	        }
-	        else {
-	        	dicOut.add(currentString + currentString.charAt(0));
-	        	currentString = currentString + currentString.charAt(0);
-	        	_outString = _outString + currentString;
-	        }  
+
+            //Inicio duvida merge, isto fica?
+	        
+	        if (codedString.charAt(0) != '0' && codedString.charAt(0) != '1')
+	        {
+	        	_outString = _outString + codedString.charAt(0);
+	        	codedString = codedString.substring(1);
+	        	makeDic();
+	        	dicOut=dicIn;
+	        	actualString = "";
+	        	currentString = "";
+	        	i = dicOut.size();
+	        	e = 0;
+
+	        }
+	        else i++;
+	        // Fim duvida merge
 	        if(codedString.substring(0).length() < getB(i+1)) 
 	        	endFlag = true;
-	        i++;
+	        //i++;
 	    }
 	    _outString = _outString + codedString;
 	}
 	
 	
-	public String prettyBinary(int value,int chars){
+	public String prettyBinary(int value,int chars)
+	{
 	    String result = Integer.toString(value,2);
 	    while (result.length()<chars){
 	       result = "0"+result;
@@ -186,15 +247,17 @@ public class LempelZiv {
 	}
 	
 	
-	public int getB(int i){
+	public int getB(int i)
+	{
 		int b = 1;
 		while(Math.pow(2,(b))<i)
 			b++;
 		return b;
 	}
-	public void printDic(){
-	    for (int i = 0; i < dicIn.size(); i++)
+	public void printDic()
 	{
+	    for (int i = 0; i < dicIn.size(); i++)
+	    {
 			System.out.println(i + " : " + dicIn.get(i));
 		}
 	}
@@ -202,14 +265,14 @@ public class LempelZiv {
 	public void makeDic()
 	{
 		int i;
+		dicIn = new ArrayList<String>();
+		
 		dicIn.add("");
-		//dicOut.add("");
-		for (i = 0; i < _inString.length(); i++)
+		for (i = 0; i < _OriginalString.length(); i++)
 		{
-			if (  !dicIn.contains(""+_inString.charAt(i)))
+			if (  !dicIn.contains(""+_OriginalString.charAt(i)))
 			{
-			    dicIn.add("" + _inString.charAt(i) );
-			    //dicOut.add("" + _inString.charAt(i) );
+			    dicIn.add("" + _OriginalString.charAt(i) );
 			}
 		}
 	}
@@ -218,6 +281,8 @@ public class LempelZiv {
 	{
 		return dicOut.contains(S);
 	}
+	
+	
 	public void printDicOut()
 	{
 	    System.out.println("Dicionário de Saída:");
@@ -226,8 +291,19 @@ public class LempelZiv {
 		}
 	}
 	
+	public void printDicIn()
+	{
+	    System.out.println("Dicionário de Entrada:");
+		for (int i = 0; i < dicIn.size(); i++){
+			System.out.println(i + " : " + dicIn.get(i));
+		}
+	}
+	
 	public boolean isAtDir(String S)
 	{
 		return dicIn.contains(S);
 	}
 }
+
+
+
