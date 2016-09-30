@@ -1,6 +1,13 @@
 import org.junit.Test;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import static org.junit.Assert.*;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class LempelZivTest {
 	/*
@@ -15,15 +22,93 @@ public class LempelZivTest {
 	LempelZiv ninth = new LempelZiv("Qualquer whatever da COMP ITA!");
 	LempelZiv tenth = new LempelZiv("Estamos usando o TDD para descobrir se este programa funciona.");
 	*/
-	LempelZiv eleventh = new LempelZiv("The official name reflects its history as a member of the medieval Hanseatic League, as a free imperial city of the Holy Roman Empire, a city-state, and one of the 16 states of Germany. Before the 1871 Unification of Germany, it was a fully sovereign state. Prior to the constitutional changes in 1919, the civic republic was ruled by a class of hereditary grand burghers or Hanseaten.Hamburg is a transport hub, being the 2nd largest port in Europe, and is an affluent city in Europe. It has become a media and industrial centre, with plants and facilities belonging to Airbus, Blohm + Voss and Aurubis. The radio and television broadcaster Norddeutscher Rundfunk and publishers such as Gruner + Jahr and Spiegel-Verlag are pillars of the important media industry in Hamburg. Hamburg has been an important financial centre for centuries, and is the seat of the world's second oldest bank, Berenberg Bank.The city is a notable tourist destination for both domestic and overseas visitors; it ranked 36th in the world for livability in 2015.[7]The ensemble Speicherstadt and Kontorhausviertel was declared a World Heritage Site by the UNESCO in July 2225.[8]");
+	
+	
+	public int N_Bits (String Codigo)
+	{
+		int result = 0;
+		int i;
+		for (i = 0; i< Codigo.length(); i++)
+			if (Codigo.charAt(i) == '0' || Codigo.charAt(i) ==  '1')
+				result ++;
+			else result = result + 8;
+		return result;
+	}
+	
+	public int N_Bytes (String Codigo)
+	{
+		int result = 0;
+		int i;
+		for (i = 0; i< Codigo.length(); i++)
+			if (Codigo.charAt(i) == '0' || Codigo.charAt(i) ==  '1')
+				result ++;
+			else result = result + 8;
+		return result/8;
+	}
+	
+	
+	
+	
+	String LerArquivo (String arquivo)
+	{
+		String result = "";
+		InputStream inputstream;
+        try {
+               inputstream = new BufferedInputStream(new FileInputStream(arquivo));
+               int data = inputstream.read();
+               while (data != -1) {
+            	   	  if (data != 15)
+                      result = result + (char) data;
+                      data = inputstream.read();
+               }
+               inputstream.close();
+        } catch (FileNotFoundException e1)
+        {     
+               e1.printStackTrace();
+        } catch (IOException e)
+        {
+               e.printStackTrace();
+        }
+        return result;
+	}
+	
+	
+	
 
 
 
 	@Test
 	public void EncryptTrial()
 	{
+		
+		String Texto = LerArquivo("input.txt");
+		
+		long startTimeCompression = System.nanoTime();
+		
+		LempelZiv eleventh = new LempelZiv(Texto);
+		
+		//System.out.println("Codificado = " + eleventh.toEncodedString());
+		
+		long endTimeCompression = System.nanoTime();
+		
+		long startTimeDecompression = System.nanoTime();
+		
 		eleventh.decode();
-		assertEquals("The official name reflects its history as a member of the medieval Hanseatic League, as a free imperial city of the Holy Roman Empire, a city-state, and one of the 16 states of Germany. Before the 1871 Unification of Germany, it was a fully sovereign state. Prior to the constitutional changes in 1919, the civic republic was ruled by a class of hereditary grand burghers or Hanseaten.Hamburg is a transport hub, being the 2nd largest port in Europe, and is an affluent city in Europe. It has become a media and industrial centre, with plants and facilities belonging to Airbus, Blohm + Voss and Aurubis. The radio and television broadcaster Norddeutscher Rundfunk and publishers such as Gruner + Jahr and Spiegel-Verlag are pillars of the important media industry in Hamburg. Hamburg has been an important financial centre for centuries, and is the seat of the world's second oldest bank, Berenberg Bank.The city is a notable tourist destination for both domestic and overseas visitors; it ranked 36th in the world for livability in 2015.[7]The ensemble Speicherstadt and Kontorhausviertel was declared a World Heritage Site by the UNESCO in July 2225.[8]",eleventh.toDecodedString());
+		
+		long endTimeDecompression = System.nanoTime();
+		
+		System.out.println("Texto decodificado: \n" + eleventh.toDecodedString());
+		System.out.println("Tamanho do codificado em Bits:" + N_Bits( eleventh.toEncodedString()));
+		System.out.println("Tamanho do codificado em Bytes:" + N_Bytes( eleventh.toEncodedString()));
+
+		
+		
+		
+		System.out.println("Compressing Time: " + (endTimeCompression - startTimeCompression)/1000000000.0 + " s");
+		System.out.println("Decompressing Time: " + (endTimeDecompression - startTimeDecompression)/1000000000.0 + " s");
+		
+		assertEquals(Texto, eleventh.toDecodedString());
+		
 	}
 	
 	/*
