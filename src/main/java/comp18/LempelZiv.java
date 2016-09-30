@@ -129,7 +129,7 @@ public class LempelZiv {
 			//printDicIn();
 			
 			
-			if (dicIn.size() == 200)
+			if (dicIn.size() == 100)
 			{
 				makeDic();
 				_middleString = _middleString + c;
