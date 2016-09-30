@@ -6,13 +6,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LempelZivTest {
-	LempelZiv first,second,third;
+	LempelZiv first = new LempelZiv("abcbababcbcabac");
+	LempelZiv second = new LempelZiv("Isto é um teste, muito legal este teste!");
+	LempelZiv third = new LempelZiv("ababa");
+	LempelZiv fourth = new LempelZiv("abababa");
+	LempelZiv fifth = new LempelZiv("ababababa");
+	LempelZiv sixth = new LempelZiv("abababababa");
+	LempelZiv seventh = new LempelZiv("ababababababa");
+	LempelZiv eighth = new LempelZiv("ababababababab");
+	LempelZiv ninth = new LempelZiv("Qualquer whatever da COMP ITA!");
+	LempelZiv tenth = new LempelZiv("Estamos usando o TDD para descobrir se este programa funciona.");
+	LempelZiv eleventh = new LempelZiv ("Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.");
+	
 	@Before
-	public void Setup(){
+	/*public void Setup(){
 		 first = new LempelZiv("abcbababcbcabac");
 		 second = new LempelZiv("Isto é um teste, muito legal este teste!");
-		// third = new LempelZiv("abababa");
-	}
+		 third = new LempelZiv("abababa");
+	}*/
 
 	@Test
 	public void EncryptTrial() {
@@ -26,13 +37,58 @@ public class LempelZivTest {
 	@Test
 	public void DecryptTrial2() {
 	    second.decode();
-	    System.out.println(second.toEncodedString());
+	    //System.out.println(second.toEncodedString());
 		assertEquals("Isto é um teste, muito legal este teste!",second.toDecodedString());
 	}	
 	@Test
 	public void DecryptTrial3() {
-	    //third.decode();
-		//assertEquals("abababa",third.toEncodedString());
+	    third.decode();
+		assertEquals("ababa",third.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial4() {
+	    fourth.decode();
+		assertEquals("abababa",fourth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial5() {
+	    fifth.decode();
+		assertEquals("ababababa",fifth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial6() {
+	    sixth.decode();
+		assertEquals("abababababa",sixth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial7() {
+	    seventh.decode();
+		assertEquals("ababababababa",seventh.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial8() {
+	    eighth.decode();
+		assertEquals("ababababababab",eighth.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial9() {
+	    ninth.decode();
+		assertEquals("Qualquer whatever da COMP ITA!",ninth.toDecodedString());
+	}
+	
+	@Test
+	public void DecryptTrial10() {
+	    tenth.decode();
+		assertEquals("Estamos usando o TDD para descobrir se este programa funciona.",tenth.toDecodedString());
+	}
+	@Test
+	public void DecryptTrial11(){
+	    eleventh.decode();
+	    assertEquals("Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.",eleventh.toDecodedString());
+	
 	}
 	@Test
 	public void TestGetB(){
@@ -55,5 +111,4 @@ public class LempelZivTest {
 		assertTrue(first.isAtDir("c"));
 		assertFalse(first.isAtDir("d"));
 	}
-
 }
