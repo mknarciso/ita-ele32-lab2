@@ -2,7 +2,8 @@ package comp18;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import java.io.IOException;
+//import org.junit.Before;
 import org.junit.Test;
 
 public class LempelZivTest {
@@ -17,17 +18,47 @@ public class LempelZivTest {
 	LempelZiv ninth = new LempelZiv("Qualquer whatever da COMP ITA!");
 	LempelZiv tenth = new LempelZiv("Estamos usando o TDD para descobrir se este programa funciona.");
 	LempelZiv eleventh = new LempelZiv ("Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.");
-	
-	@Before
-	/*public void Setup(){
+	LempelZiv clean = new LempelZiv();
+	/*@Before
+	public void Setup(){
 		 first = new LempelZiv("abcbababcbcabac");
 		 second = new LempelZiv("Isto é um teste, muito legal este teste!");
 		 third = new LempelZiv("abababa");
 	}*/
-
+	@Test
+	public void TestReadFile() throws IOException{
+	    try{ 
+	    clean.addFileToEncode("testeIn.txt");
+	    //clean.decode();
+	    assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.inputString());
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+	}
+	@Test
+	public void TestReadFileToEncode() throws IOException{
+	    try{ 
+	    clean.addFileToEncode("testeIn.txt");
+	    clean.decode();
+	    assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.toDecodedString());
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+	}
+	/*@Test
+	public void TestReadFileToByte() throws IOException{
+	    try{ 
+	    clean.addFileToEncode("testeIn.txt");
+	    clean.toByte();
+	    clean.printBytes();
+	    //assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.toDecodedString());
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+	}*/
 	@Test
 	public void EncryptTrial() {
-		assertEquals("010100110101000100011000111000c",first.toEncodedString());
+		assertEquals("abc010100110101000100011000111000c",first.toEncodedString());
 		}
 	@Test
 	public void DecryptTrial() {
