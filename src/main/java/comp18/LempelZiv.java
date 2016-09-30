@@ -63,10 +63,10 @@ public class LempelZiv {
 				_middleString = _middleString + prettyBinary(dicIn.indexOf(s),getB(dicIn.size()-1));
 			else _middleString = _middleString + prettyBinary(dicIn.indexOf(s.substring(0, s.length() - 1)),getB(dicIn.size()-1));
 			
-			System.out.println("Sequencia ateh agora:" + _middleString);
+			//System.out.println("Sequencia ateh agora:" + _middleString);
 			
 			
-			printDicIn();
+			//printDicIn();
 			
 			
 			if (dicIn.size() == 100)
@@ -85,16 +85,16 @@ public class LempelZiv {
 				c = "";
 				
 				
-				System.out.println("_inString = " + _inString);
+				//System.out.println("_inString = " + _inString);
 			}
 			
 			
 		} 
-		System.out.println("k = " + k);
+		//System.out.println("k = " + k);
 
-		_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
+		//_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
 		
-		System.out.println(_middleString);
+		//System.out.println(_middleString);
 		//printDic();
 	}
 	public void decode()
@@ -119,25 +119,28 @@ public class LempelZiv {
 	        //if(actualString!="")
 	        e = Integer.parseInt(actualString, 2);
 	        
-	        System.out.println("e = " + e + ", i = " + i);
-	        System.out.println("CodedString:" + codedString);
+	        //System.out.println("e = " + e + ", i = " + i);
+	        //System.out.println("CodedString:" + codedString);
 	        
-	        if (e < dicOut.size())
+	        if (e>0)
 	        {
-	        	_outString = _outString + dicOut.get(e);
-	        	if (!dicOut.contains(currentString + dicOut.get(e).charAt(0)))
+	        	if (e < dicOut.size())
 	        	{
-	        		dicOut.add(currentString + dicOut.get(e).charAt(0) );
+	        		_outString = _outString + dicOut.get(e);
+	        		if (!dicOut.contains(currentString + dicOut.get(e).charAt(0)))
+	        		{
+	        			dicOut.add(currentString + dicOut.get(e).charAt(0) );
+	        		}
+	        		currentString = dicOut.get(e);
 	        	}
-	        	currentString = dicOut.get(e);
+	        	else
+	        	{
+	        		dicOut.add(currentString + currentString.charAt(0));       	
+	        		currentString = currentString + currentString.charAt(0);
+	        		_outString = _outString + currentString;
+	        		//System.out.println("Entrou no caso patológico!");
+	        	}  
 	        }
-	        else
-	        {
-	        	dicOut.add(currentString + currentString.charAt(0));       	
-	        	currentString = currentString + currentString.charAt(0);
-	        	_outString = _outString + currentString;
-	        	System.out.println("Entrou no caso patológico!");
-	        }  
 
 	        
 	        if (codedString.charAt(0) != '0' && codedString.charAt(0) != '1')
@@ -157,11 +160,11 @@ public class LempelZiv {
 	        	endFlag = true;
 	        
 	        
-	        System.out.println("OutString:" + _outString);
+	        //System.out.println("OutString:" + _outString);
 	        
-	        printDicOut();
+	        //printDicOut();
 	        
-	        System.out.println("\n");
+	        //System.out.println("\n");
 	    }
 	    
 	    _outString = _outString + codedString;
@@ -239,6 +242,7 @@ public class LempelZiv {
 		return dicIn.contains(S);
 	}
 }
+
 
 
 
