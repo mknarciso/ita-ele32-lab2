@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 public class LempelZivTest {
-	/*LempelZiv first = new LempelZiv("abcbababcbcabac");
+	LempelZiv first = new LempelZiv("abcbababcbcabac");
 	LempelZiv second = new LempelZiv("Isto é um teste, muito legal este teste!");
 	LempelZiv third = new LempelZiv("ababa");
 	LempelZiv fourth = new LempelZiv("abababa");
@@ -18,12 +18,9 @@ public class LempelZivTest {
 	LempelZiv ninth = new LempelZiv("Qualquer whatever da COMP ITA!");
 	LempelZiv tenth = new LempelZiv("Estamos usando o TDD para descobrir se este programa funciona.");
 	LempelZiv eleventh = new LempelZiv ("Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.");
-	*/LempelZiv clean = new LempelZiv();
+	LempelZiv clean = new LempelZiv();
+
 	@Test
-	public void doEverything(){
-        clean.doEverything("hamlet-english");
-	}
-	/*@Test
 	public void TestReadFile() throws IOException{
 	    try{ 
 	    clean.addFileToEncode("testeIn.txt");
@@ -67,7 +64,7 @@ public class LempelZivTest {
             e.printStackTrace();
         }
     }
-   *//* @Test
+   /* @Test
 	public void TestDecodingMiddleString() throws IOException{
 	    try{ 
 	    clean.addFileToDecode("testeOut.dat");
@@ -81,7 +78,7 @@ public class LempelZivTest {
             e.printStackTrace();
         }
     }*/
-    /*@Test
+    @Test
 	public void TestDecoding() throws IOException{
 	    try{ 
 	    clean.addFileToDecode("testeOut.dat");
@@ -182,5 +179,5 @@ public class LempelZivTest {
 		assertTrue(first.isAtDir("b"));
 		assertTrue(first.isAtDir("c"));
 		assertFalse(first.isAtDir("d"));
-	}*/
+	}
 }

@@ -31,24 +31,25 @@ public class LempelZiv {
 		_OriginalString = inicial;
 		makeDic();
 		baseDic(dicIn);
-		encode();
+		encode(10000);
 	}
 	
 	
-	public void addFileToEncode(String filename) throws IOException {
-	    System.out.println("addFiletoEncode");
+	public void addFileToEncode(String filename, int L) throws IOException {
+	    //System.out.println("addFiletoEncode: ");
+	    
 	    try{
     		_inString = readFile("./src/data/"+filename);
 		    _OriginalString = _inString;
     		makeDic();
 		    baseDic(dicIn);
-    		encode();
+    		encode(L);
     		}catch(IOException e){
             e.printStackTrace();
         }
 	}
 	public void addFileToDecode(String filename) throws IOException {
-	    System.out.println("addFiletoDecode");
+	   // System.out.println("addFiletoDecode: ");
 	    try{
     		readFromFile("./src/data/"+filename);
     		_middleHexString = byteArrayToHex(_byteMiddleString);
@@ -57,7 +58,7 @@ public class LempelZiv {
         }
 	}
 	public void readFromFile(String filename) throws IOException{
-	    System.out.println("readFromFile");
+	    //System.out.println("readFromFile");
         try{Path path = Paths.get(filename);
             __byteMiddleString = Files.readAllBytes(path);
             _byteMiddleString = new Byte[__byteMiddleString.length];
@@ -71,17 +72,20 @@ public class LempelZiv {
     }
 	
 	public void decodeFile(String filename) throws IOException{
-	    System.out.println("decodeFile");
+	    //System.out.println("decodeFile: ");
+	    //long startTime = System.nanoTime();
 	    PrintWriter out = new PrintWriter("./src/data/"+filename);
 	    try{
 	        out.println(_outString);
+			//System.out.println((System.nanoTime()-startTime)/1000000000.0 + " s");
 	    } finally{
 	        out.close();
 	    }
 	}
 	
     String readFile(String fileName) throws IOException {
-        System.out.println("readFile");
+        //System.out.println("readFile: ");
+        //long startTime = System.nanoTime();
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         try {
             StringBuilder sb = new StringBuilder();
@@ -91,10 +95,12 @@ public class LempelZiv {
                 sb.append("\n");
                 line = br.readLine();
             }
+    		//System.out.println((System.nanoTime()-startTime)/1000000000.0 + " s");
             return sb.toString();
         } finally {
             br.close();
         }
+
     }
     public static byte[] stringToBytesUTFNIO(String str) {
      char[] buffer = str.toCharArray();
@@ -117,7 +123,8 @@ public class LempelZiv {
     
   
     public void fromByte(){
-        System.out.println("fromByte");
+        //System.out.println("fromByte: ");
+        //long startTime = System.nanoTime();
         boolean endDic = false;
         int i = 0;
         byte[] readByte = new byte[2];
@@ -136,9 +143,10 @@ public class LempelZiv {
                 dicOut.add(readString);
                 dicBase.add(readString);
                 _middleString = _middleString + readString;
-                //System.out.println(readString);
             }
+            //System.out.println("Dic Read time: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
         }
+        //long totalSize = _byteMiddleString.length;
         while(i<_byteMiddleString.length){
             boolean endStripe = false;
             while(!endStripe){
@@ -146,6 +154,8 @@ public class LempelZiv {
                     endStripe = true;
                     i++;
                 } else {
+                	//if(i%1000==0)
+                		//System.out.println((i*100/totalSize)+"% - "+(System.nanoTime()-startTime)/1000000000.0 + " s");
                     _middleString = _middleString + String.format("%8s", Integer.toBinaryString(_byteMiddleString[i] & 0xFF)).replace(' ', '0');
                 }
                 i++;
@@ -161,16 +171,15 @@ public class LempelZiv {
             _middleString = _middleString + readString;
             //System.out.println(readString);
         }
-        //printDicOut();
-        //printDicBase();
+
+		//System.out.println((System.nanoTime()-startTime)/1000000000.0 + " s");
     }
     
     public void toByte(){
-        System.out.println("toByte");
         String pre = _middleString;
 		boolean flagEnd = false;
 		List<Byte> arrays = new ArrayList<Byte>();
-		//Leitura do dicionário
+		//Leitura do dicionÃ¡rio
 		while(flagEnd==false){
 		  if((pre.charAt(0)=='0'||pre.charAt(0)=='1')&&(pre.charAt(1)=='0'||pre.charAt(1)=='1')){
 		     if(pre.charAt(2)=='0'||pre.charAt(2)=='1'){
@@ -195,16 +204,14 @@ public class LempelZiv {
 		// Inicio da leitura do arquivo
 		String aux="";
 		int fix =0;
-		// pre = middleString, ler e esvaziá-la
+		// pre = middleString, ler e esvaziÃ¡-la
 		while(pre.length()>0){
 		  //Se for binario adiciona a aux
 		  if(pre.charAt(0)=='0'||pre.charAt(0)=='1'){
 		      aux = aux+pre.charAt(0);
-		      //System.out.println("new aux:"+aux);
 		      if(aux.length()/8==1){
                   short a = Short.parseShort(aux, 2);
                   ByteBuffer bytes = ByteBuffer.allocate(2).putShort(a);
-                  //System.out.println(bytes.array()[1]);
 		          arrays.add(bytes.array()[1]);
 		          aux="";
 		      }
@@ -219,8 +226,6 @@ public class LempelZiv {
     	          arrays.add(bytes.array()[1]);
 
 	          }
-
-		      //pre=pre.substring(1);
     	      arrays.add((byte)-1);    
               arrays.add((byte)-1);
               arrays.add((byte)fix);
@@ -231,14 +236,13 @@ public class LempelZiv {
 		  }
 		  pre=pre.substring(1);
 		}
-		//System.out.println(arrays);
 		_byteMiddleString = arrays.toArray(new Byte[arrays.size()]);
     }
     public void saveByteFile(String path) throws IOException{
-        System.out.println("saveByteFile");
+        //System.out.println("saveByteFile");
         FileOutputStream stream = new FileOutputStream("./src/data/"+path);
         try {
-            
+        	//System.out.println(_byteMiddleString.length);
             stream.write(toPrimitives(_byteMiddleString));
         } finally {
             stream.close();
@@ -247,16 +251,14 @@ public class LempelZiv {
     byte[] toPrimitives(Byte[] oBytes)
     {
         byte[] bytes = new byte[oBytes.length];
-    
         for(int i = 0; i < oBytes.length; i++) {
             bytes[i] = oBytes[i];
         }
-    
         return bytes;
     }
     
     public void printBytes(){
-        System.out.println( byteArrayToHex( _byteMiddleString ) );
+        //System.out.println( byteArrayToHex( _byteMiddleString ) );
     }
     public static String byteArrayToHex(Byte[] a) {
        StringBuilder sb = new StringBuilder(a.length * 2);
@@ -272,16 +274,6 @@ public class LempelZiv {
 	{
 		return _middleString;
 	}
-	/*
-	public String toStringtoBeWritteninFile()
-	{
-		String result;
-		while (_middleString.length() %8 != 0)
-			_middleString =_middleString
-			
-		
-	}
-	*/
 	
 	public String toDecodedString()
 	{
@@ -294,22 +286,20 @@ public class LempelZiv {
 	    }
 	    return result;
 	}
-	private void encode()
+	private void encode(int L)
 	{
-		System.out.println("Comecando a encodar!");
-		
+		//System.out.println("Encode: ");
+		//long startTime = System.nanoTime();
 		int j = 0;
 		int k = 0;
 		_middleString = addDir();
 		String s="", S="", c="";
 		while (j<_inString.length())
 		{
-			k=j;
+		    k=j;
 			S=c;
 			while(isAtDir(S))
 			{
-				//&&k<_inString.length()){
-			    //System.out.println("Is at dir: "+ S);
 			    if (k < _inString.length())
 			    	c = "" +_inString.charAt(k);
 				s = S;
@@ -318,44 +308,28 @@ public class LempelZiv {
 			}
 			j=k;
 			dicIn.add(""+S);
-			//System.out.println(_middleString +"  " +prettyBinary(dicIn.indexOf(s),getB(dicIn.size()-1)));
+			//long totalSize=_inString.length();
+			//long cont =0;
 			if (k - 1 < _inString.length())
 				_middleString = _middleString + prettyBinary(dicIn.indexOf(s),getB(dicIn.size()-1));
 			else _middleString = _middleString + prettyBinary(dicIn.indexOf(s.substring(0, s.length() - 1)),getB(dicIn.size()-1));
-			
-			//System.out.println("Sequencia ateh agora:" + _middleString);
-			
-			
-			//printDicIn();
-			
-			
-			if (dicIn.size() == 10000)
+			if (dicIn.size() == L)
 			{
+				//System.out.println("Reset Dic("+L+") - "+(cont*100/totalSize)+"% : "+(System.nanoTime()-startTime)/1000000000.0 + " s");
 			     resetDic();
 				_middleString = _middleString + c;
-
 				if (k < _inString.length())
 					_inString = _inString.substring(k);
 				else _inString = "";
-				
 				j = 0;
 				k = 0;
 				s = "";
 				S = "";
 				c = "";
-				
-				
-				//System.out.println("_inString = " + _inString);
 			}
-			
-			
 		} 
-		//System.out.println("k = " + k);
-
 		_middleString = _middleString + _inString.charAt( _inString.length() - 1 );
-		
-		//System.out.println(_middleString);
-		//printDic();
+		//System.out.println((System.nanoTime()-startTime)/1000000000.0 + " s");
 	}
 	public String makeOutDic(String pre){
 	    dicOut=new ArrayList<String>();
@@ -391,19 +365,16 @@ public class LempelZiv {
     }
 	public void decode()
 	{
-	    System.out.println("Decode");
+		//long startTimeCompression = System.nanoTime();
+	    //System.out.println("Decode");
 	    int e = 0;
 	    String codedString = _middleString;
 	    String actualString = "";
 	    String currentString = "";
 	    _outString = "";
 	    boolean endFlag = false;
-	    //boolean pegar_o_ultimo = true;
         codedString = makeOutDic(codedString);
-        //baseDic(dicOut);
-        //dicBase=dicOut;
         int i = dicOut.size();
-
 	    while (codedString.length()>0 && !endFlag)
 	    {
 	        int ends = getB(i);
@@ -411,7 +382,6 @@ public class LempelZiv {
 	           ends = codedString.length()-1;
 	        actualString = codedString.substring(0,ends);
 	        codedString = codedString.substring(ends);
-
 	        e = Integer.parseInt(actualString, 2);
 	        if (e>0){
 	            if (e < dicOut.size()){
@@ -422,39 +392,32 @@ public class LempelZiv {
     	        	currentString = dicOut.get(e);
     	        }
     	        else {
-    	        	dicOut.add(currentString + currentString.charAt(0));
-    	        	currentString = currentString + currentString.charAt(0);
-    	        	//System.out.print(currentString);
-    	        	_outString = _outString + currentString;
+    	        	if(!currentString.equals("")){
+	    	        	dicOut.add(currentString + currentString.charAt(0));
+	    	        	currentString = currentString + currentString.charAt(0);
+	    	        	_outString = _outString + currentString;
+    	        	}
     	        }  
-
 	        }
-
             //Inicio duvida merge, isto fica?
-	        
 	        if (codedString.charAt(0) != '0' && codedString.charAt(0) != '1')
 	        {
+	        	//System.out.println("Zerando o Dicionário");
 	        	_outString = _outString + codedString.charAt(0);
 	        	codedString = codedString.substring(1);
 	        	copyDic();
-	        	//makeDic();
-	        	//dicOut=dicIn;
-	        	//dicOut=dicBase;
 	        	actualString = "";
 	        	currentString = "";
 	        	i = dicOut.size();
 	        	e = 0;
-
 	        }
 	        else i++;
 	        // Fim duvida merge
 	        if(codedString.substring(0).length() < getB(i+1)) 
-
 	        	endFlag = true;
-	        //i++;
 	    }
 	    _outString = _outString + codedString;
-
+	    //System.out.println("Decoding Time: " + (System.nanoTime() - startTimeCompression)/1000000000.0 + " s");
 	}
 	
 	
@@ -487,7 +450,6 @@ public class LempelZiv {
 	{
 		int i;
 		dicIn = new ArrayList<String>();
-		
 		dicIn.add("");
 		for (i = 0; i < _OriginalString.length(); i++)
 		{
@@ -514,7 +476,7 @@ public class LempelZiv {
 	}
 	public void printDicBase()
 	{
-	    System.out.println("Dicionário Base:");
+	    System.out.println("DicionÃ¡rio Base:");
 		for (int i = 0; i < dicBase.size(); i++){
 			System.out.println(i + " : " + dicBase.get(i));
 		}
@@ -522,7 +484,7 @@ public class LempelZiv {
 	
 	public void printDicIn()
 	{
-	    System.out.println("Dicionário de Entrada:");
+	    System.out.println("DicionÃ¡rio de Entrada:");
 		for (int i = 0; i < dicIn.size(); i++){
 			System.out.println(i + " : " + dicIn.get(i));
 		}
@@ -533,19 +495,55 @@ public class LempelZiv {
 		return dicIn.contains(S);
 	}
 
-
-
-    public void doEverything(String name) {        
+    public void step1(String name,int L) {        
         try{
-            addFileToEncode(name+".txt");    
-    	    addFileToDecode(name+".dat");
-    	    fromByte();
-    	    decode();
-    	    decodeFile(name+"Output.txt");
+        	long startTime = System.nanoTime();
+        	System.out.println("Encoding: "+name+" / "+L);
+            addFileToEncode(name+".txt",L); 
+            System.out.println("Encoding time: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
+            toByte();
+            System.out.println("After byte conv time: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
+            saveByteFile(name+"-L"+L+".dat");
+            System.out.println("After Save File\nTotal Ziping time: "+(System.nanoTime()-startTime)/1000000000.0 + " s\n");
 		}catch(IOException e){
             e.printStackTrace();
         }
     }
+
+    public void step2(String name,int L) {        
+        try{
+        	long startTime = System.nanoTime();
+        	System.out.println("Decoding: "+name+" / "+L);
+    	    addFileToDecode(name+"-L"+L+".dat");
+            System.out.println("File opened: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
+    	    fromByte();
+            System.out.println("After byte->String conv time: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
+    	    decode();
+            System.out.println("After decoding time: "+(System.nanoTime()-startTime)/1000000000.0 + " s");
+    	    decodeFile(name+"-L"+L+"Output.txt");
+            System.out.println("Decoding total time: "+(System.nanoTime()-startTime)/1000000000.0 + " s\n\n");
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public static void main(String [] args)
+	{
+    	Integer[] sizes = {10000,1000,300};
+    	String[] books = {"hamlet","iliad","annakarenina"};
+    	String[] languages = {"english","finnish","french","portuguese","greek"};
+    	for(int s=0;s<sizes.length;s++){
+    		for(int b=0;b<books.length;b++){
+    			for(int l=0;l<languages.length;l++){
+    		    	LempelZiv clean = new LempelZiv();
+    		        clean.step1(books[b]+"-"+languages[l],sizes[s]);
+    		        clean = new LempelZiv();
+    		        clean.step2(books[b]+"-"+languages[l],sizes[s]);
+    			}
+    		}
+    	}
+
+	}
+    
+    
 }
-
-
