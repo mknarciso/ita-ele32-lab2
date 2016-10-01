@@ -39,25 +39,52 @@ public class LempelZivTest {
 	public void TestReadFileToEncode() throws IOException{
 	    try{ 
 	    clean.addFileToEncode("testeIn.txt");
+	    System.out.println(clean.toEncodedString());
 	    clean.decode();
+	    
 	    assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.toDecodedString());
 		}catch(IOException e){
             e.printStackTrace();
         }
 	}
-	/*@Test
+	@Test
 	public void TestReadFileToByte() throws IOException{
 	    try{ 
 	    clean.addFileToEncode("testeIn.txt");
 	    clean.toByte();
-	    clean.printBytes();
+	    //clean.printBytes();
+	    clean.saveByteFile("testeOut.dat");
 	    //assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.toDecodedString());
 		}catch(IOException e){
             e.printStackTrace();
         }
-	}*/
+    }
+	@Test
+	public void TestReadFromByteFile() throws IOException{
+	    try{ 
+	    clean.addFileToDecode("testeOut.dat");
+	    //clean.printBytes();
+	    }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    @Test
+	public void TestDecoding() throws IOException{
+	    try{ 
+	    clean.addFileToDecode("testeOut.dat");
+	    //clean.printBytes();
+	    clean.fromByte();
+	    System.out.println(clean.toEncodedString());
+	    clean.decode();
+	    assertEquals("Isto é um teste para abrir arquivos.\n\n\"Σημείωση: Το κείμενο έχει γραφεί σχεδόν χωρίς καθόλου τόνους, οπότε ο τονισμός είναι δικός μου. Αν θεωρείτε ότι η μουσικότητα του κειμένου έχει βλαφθεί, παρακαλώ τονίστε το αλλού.  Οι αριθμοί των γραμμών δεν είναι πάντοτε στη σωστή σειρά τους πχ. 409, 618, και μερικές φορές αναγράφονται 2 σε μια γραμμή π.χ. 89-91. Προφανώς ο μεταφραστής έχει ανακατατάξει τις γραμμές του πρωτοτύπου. Η Ραψωδία Ν (η μάχη στα πλοία) δεν έχει μεταφραστεί.\");\n",clean.toDecodedString());
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 	@Test
 	public void EncryptTrial() {
+	    //first.toByte();
+	    //first.printBytes();
 		assertEquals("abc010100110101000100011000111000c",first.toEncodedString());
 		}
 	@Test
