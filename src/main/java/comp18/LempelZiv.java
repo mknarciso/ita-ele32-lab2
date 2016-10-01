@@ -1,6 +1,7 @@
 
 package comp18;
 //import java.io.FileInputStream;
+import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -35,6 +36,7 @@ public class LempelZiv {
 	
 	
 	public void addFileToEncode(String filename) throws IOException {
+	    System.out.println("addFiletoEncode");
 	    try{
     		_inString = readFile("./src/data/"+filename);
 		    _OriginalString = _inString;
@@ -46,6 +48,7 @@ public class LempelZiv {
         }
 	}
 	public void addFileToDecode(String filename) throws IOException {
+	    System.out.println("addFiletoDecode");
 	    try{
     		readFromFile("./src/data/"+filename);
     		_middleHexString = byteArrayToHex(_byteMiddleString);
@@ -54,6 +57,7 @@ public class LempelZiv {
         }
 	}
 	public void readFromFile(String filename) throws IOException{
+	    System.out.println("readFromFile");
         try{Path path = Paths.get(filename);
             __byteMiddleString = Files.readAllBytes(path);
             _byteMiddleString = new Byte[__byteMiddleString.length];
@@ -66,7 +70,18 @@ public class LempelZiv {
         }
     }
 	
+	public void decodeFile(String filename) throws IOException{
+	    System.out.println("decodeFile");
+	    PrintWriter out = new PrintWriter("./src/data/"+filename);
+	    try{
+	        out.println(_outString);
+	    } finally{
+	        out.close();
+	    }
+	}
+	
     String readFile(String fileName) throws IOException {
+        System.out.println("readFile");
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         try {
             StringBuilder sb = new StringBuilder();
@@ -102,6 +117,7 @@ public class LempelZiv {
     
   
     public void fromByte(){
+        System.out.println("fromByte");
         boolean endDic = false;
         int i = 0;
         byte[] readByte = new byte[2];
@@ -145,9 +161,12 @@ public class LempelZiv {
             _middleString = _middleString + readString;
             //System.out.println(readString);
         }
+        //printDicOut();
+        //printDicBase();
     }
     
     public void toByte(){
+        System.out.println("toByte");
         String pre = _middleString;
 		boolean flagEnd = false;
 		List<Byte> arrays = new ArrayList<Byte>();
@@ -216,6 +235,7 @@ public class LempelZiv {
 		_byteMiddleString = arrays.toArray(new Byte[arrays.size()]);
     }
     public void saveByteFile(String path) throws IOException{
+        System.out.println("saveByteFile");
         FileOutputStream stream = new FileOutputStream("./src/data/"+path);
         try {
             
@@ -276,7 +296,7 @@ public class LempelZiv {
 	}
 	private void encode()
 	{
-		//System.out.println("Comecando a encodar!");
+		System.out.println("Comecando a encodar!");
 		
 		int j = 0;
 		int k = 0;
@@ -309,9 +329,9 @@ public class LempelZiv {
 			//printDicIn();
 			
 			
-			if (dicIn.size() == 100)
+			if (dicIn.size() == 10000)
 			{
-				makeDic();
+			     resetDic();
 				_middleString = _middleString + c;
 
 				if (k < _inString.length())
@@ -338,6 +358,7 @@ public class LempelZiv {
 		//printDic();
 	}
 	public String makeOutDic(String pre){
+	    dicOut=new ArrayList<String>();
 		dicOut.add("");
 		boolean flagEnd = false;
 		while(flagEnd==false){
@@ -364,9 +385,13 @@ public class LempelZiv {
         dicBase = null;
         dicBase = new ArrayList<String>(from);
     }
+    public void resetDic(){
+        dicIn = null;
+        dicIn = new ArrayList<String>(dicBase);
+    }
 	public void decode()
 	{
-	    
+	    System.out.println("Decode");
 	    int e = 0;
 	    String codedString = _middleString;
 	    String actualString = "";
@@ -375,7 +400,8 @@ public class LempelZiv {
 	    boolean endFlag = false;
 	    //boolean pegar_o_ultimo = true;
         codedString = makeOutDic(codedString);
-        dicBase=dicOut;
+        //baseDic(dicOut);
+        //dicBase=dicOut;
         int i = dicOut.size();
 
 	    while (codedString.length()>0 && !endFlag)
@@ -398,7 +424,7 @@ public class LempelZiv {
     	        else {
     	        	dicOut.add(currentString + currentString.charAt(0));
     	        	currentString = currentString + currentString.charAt(0);
-    	        	System.out.print(currentString);
+    	        	//System.out.print(currentString);
     	        	_outString = _outString + currentString;
     	        }  
 
@@ -486,6 +512,13 @@ public class LempelZiv {
 			System.out.println(i + " : " + dicOut.get(i));
 		}
 	}
+	public void printDicBase()
+	{
+	    System.out.println("Dicionário Base:");
+		for (int i = 0; i < dicBase.size(); i++){
+			System.out.println(i + " : " + dicBase.get(i));
+		}
+	}
 	
 	public void printDicIn()
 	{
@@ -499,8 +532,20 @@ public class LempelZiv {
 	{
 		return dicIn.contains(S);
 	}
+
+
+
+    public void doEverything(String name) {        
+        try{
+            addFileToEncode(name+".txt");    
+    	    addFileToDecode(name+".dat");
+    	    fromByte();
+    	    decode();
+    	    decodeFile(name+"Output.txt");
+		}catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }
-
-
 
 
